@@ -1,0 +1,24 @@
+name: Compile GCC
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - README.md
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [2.7.2, 2.7.2.1, 2.7.2.2, 2.7.2.3, 2.8.1]
+    name: Build GCC ${{ matrix.version }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Build GCC
+        run: VERSION=${{ matrix.version }} make
+      - name: Create artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gcc-${{ matrix.version }}
+          path: build-gcc-${{ matrix.version }}

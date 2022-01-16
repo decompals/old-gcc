@@ -30,4 +30,5 @@ RUN test -f cc1
 RUN file cc1
 
 COPY entrypoint.sh /work/
+RUN chmod +x /work/entrypoint.sh
 CMD [ "/work/entrypoint.sh" ]
