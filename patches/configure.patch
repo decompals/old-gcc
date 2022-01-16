@@ -1,0 +1,7 @@
+--- gcc-2.7.2.2/configure	1997-01-30 22:20:15.000000000 +0000
++++ gcc-2.7.2.3/configure	1997-08-13 18:23:24.000000000 +0100
+@@ -2389,2 +2401,4 @@
+ 	case $machine in
++	*-*-linux-gnu*)
++		;; # Existing Linux/GNU systems do not use the GNU setup.
+ 	*-*-gnu*)

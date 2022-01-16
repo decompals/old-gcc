@@ -1,0 +1,12 @@
+--- gcc-2.8.1/obstack.h	1998-02-20 13:21:47.000000000 +0000
++++ gcc-2.8.1/obstack_patched.h	2022-01-12 05:30:24.443626800 +0000
+@@ -418,7 +418,8 @@
+ ({ struct obstack *__o = (OBSTACK);					\
+    if (__o->next_free + sizeof (void *) > __o->chunk_limit)		\
+      _obstack_newchunk (__o, sizeof (void *));				\
+-   *((void **)__o->next_free)++ = ((void *)datum);			\
++   *((void **)__o->next_free) = ((void *)datum);			\
++   __o->next_free += sizeof (void *);                                   \
+    (void) 0; })
+ 
+ # define obstack_int_grow(OBSTACK,datum)				\
