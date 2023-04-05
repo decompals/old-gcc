@@ -1,7 +1,7 @@
 diff --color -ruN -p1 gcc-2.6.3/config/mips/psx.h gcc-2.6.3-psx/config/mips/psx.h
 --- gcc-2.6.3/config/mips/psx.h	1970-01-01 01:00:00.000000000 +0100
 +++ gcc-2.6.3-psx/config/mips/psx.h	2023-03-26 13:52:13.400875920 +0100
-@@ -0,0 +1,111 @@
+@@ -0,0 +1,108 @@
 +/* Definitions of target machine for GNU compiler.  Iris version.
 +   Copyright (C) 1991, 1993, 1995, 1996 Free Software Foundation, Inc.
 +
@@ -25,7 +25,7 @@ diff --color -ruN -p1 gcc-2.6.3/config/mips/psx.h gcc-2.6.3-psx/config/mips/psx.
 +
 +/* Definitions by GIL for PSX */
 +
-+#define TARGET_DEFAULT (MASK_GAS+MASK_SOFT_FLOAT+MASK_SPLIT_ADDR+MASK_GPOPT)
++#define TARGET_DEFAULT (MASK_GAS+MASK_SOFT_FLOAT+MASK_GPOPT)
 +
 +#define CPP_PREDEFINES	"-Dmips -DMIPSEL"
 +
@@ -56,16 +56,8 @@ diff --color -ruN -p1 gcc-2.6.3/config/mips/psx.h gcc-2.6.3-psx/config/mips/psx.
 +   NULL_TREE.  Some target formats do not support arbitrary sections.  Do not
 +   define this macro in such cases.  */
 +
-+#define ASM_OUTPUT_SECTION_NAME(F, DECL, NAME) \
-+do {								\
-+  extern FILE *asm_out_text_file;				\
-+  if ((DECL) && TREE_CODE (DECL) == FUNCTION_DECL)		\
-+    fprintf (asm_out_text_file, "\t.section %s,\"ax\",@progbits\n", (NAME)); \
-+  else if ((DECL) && TREE_READONLY (DECL))			\
-+    fprintf (F, "\t.section %s,\"a\",@progbits\n", (NAME));	\
-+  else								\
-+    fprintf (F, "\t.section %s,\"aw\",@progbits\n", (NAME));	\
-+} while (0)
++#define ASM_OUTPUT_SECTION_NAME(FILE, NAME) \
++  fprintf (FILE, "\t.section %s,\"aw\",@progbits\n", (NAME))
 +
 +/* GIL: R3000 machine supports ISA 1 */
 +#define MIPS_ISA_DEFAULT 1
@@ -80,7 +72,7 @@ diff --color -ruN -p1 gcc-2.6.3/config/mips/psx.h gcc-2.6.3-psx/config/mips/psx.
 +/* Always use 1 for .file number.  I [meissner@osf.org] wonder why
 +   IRIS needs this.  */
 +
-+#define SET_FILE_NUMBER() num_source_filenames = 1
++#define SET_FILE_NUMBER() ++num_source_filenames
 +
 +/* Put out a label after a .loc.  I [meissner@osf.org] wonder why
 +   IRIS needs this.  */
@@ -108,6 +100,11 @@ diff --color -ruN -p1 gcc-2.6.3/config/mips/psx.h gcc-2.6.3-psx/config/mips/psx.
 +
 +/* Generate calls to memcpy, etc., not bcopy, etc.  */
 +#define TARGET_MEM_FUNCTIONS
++
++/* Xeeynamo: force to use little-endian */
++#define MIPSEL
++#define BYTES_BIG_ENDIAN 0
++#define WORDS_BIG_ENDIAN 0
 +
 +/* Plain char is unsigned in the SGI compiler.  */
 +#define DEFAULT_SIGNED_CHAR 0
