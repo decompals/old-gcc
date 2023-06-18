@@ -1,6 +1,7 @@
 name: Compile GCC
 on:
   push:
+    tags: '*'
     branches: [master]
     paths-ignore:
       - README.md
