@@ -14,11 +14,22 @@ jobs:
     name: Build GCC ${{ matrix.version }}
     steps:
       - name: Clone repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build GCC
         run: VERSION=${{ matrix.version }} make
+      - name: Create release archive
+        shell: bash
+        run: |
+          cd build-gcc-${{ matrix.version }}
+          tar -czvf ../gcc-${{ matrix.version }}.tar.gz *
       - name: Create artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: gcc-${{ matrix.version }}
-          path: build-gcc-${{ matrix.version }}
+          path: gcc-${{ matrix.version }}.tar.gz
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            gcc-${{ matrix.version }}.tar.gz
