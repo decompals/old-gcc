@@ -1,0 +1,68 @@
+--- cp/g++.c	1994-07-11 22:24:32.000000000 +0000
++++ cp/g++_patched.c	2023-09-19 17:35:06.256145393 +0000
+@@ -40,6 +40,7 @@
+ #include <stdio.h>
+ #include <sys/types.h>
+ #include <sys/file.h>   /* May get R_OK, etc. on some systems.  */
++#include <errno.h>
+ 
+ /* Defined to the name of the compiler; if using a cross compiler, the
+    Makefile should compile this file with the proper name
+@@ -78,12 +79,24 @@
+ #endif
+ #endif
+ 
+-extern int errno, sys_nerr;
++#ifndef errno
++extern int errno;
++#endif
++
++#ifndef VMS
++#ifndef HAVE_STRERROR
++extern int sys_nerr;
+ #if defined(bsd4_4) || defined(__NetBSD__)
+ extern const char *const sys_errlist[];
+ #else
+ extern char *sys_errlist[];
+ #endif
++#else	/* HAVE_STERRROR */
++char *strerror ();
++#endif
++#else	/* VMS */
++char *strerror (int,...);
++#endif
+ 
+ /* Name with which this program was invoked.  */
+ static char *programname;
+@@ -204,10 +217,14 @@
+ {
+   char *s;
+ 
++#ifndef HAVE_STRERROR  
+   if (errno < sys_nerr)
+     s = concat ("%s: ", sys_errlist[errno], "");
+   else
+     s = "cannot open %s";
++#else
++  s = strerror (errno);
++#endif
+   fatal (s, name);
+ }
+ 
+@@ -276,11 +293,14 @@
+ {
+   char *s;
+ 
++#ifndef HAVE_STRERROR
+   if (errno < sys_nerr)
+-    s = concat ("installation problem, cannot exec %s: ",
+-		sys_errlist[errno], "");
++    s = concat ("installation problem, cannot exec %s: ", sys_errlist[errno], "");
+   else
+     s = "installation problem, cannot exec %s";
++#else
++  s = strerror (errno);
++#endif    
+   error (s, name);
+ }
+ 

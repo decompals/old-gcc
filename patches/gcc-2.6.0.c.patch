@@ -1,0 +1,83 @@
+--- gcc.c	1994-07-11 19:08:58.000000000 +0000
++++ gcc_patched.c	2023-09-19 17:38:56.429907831 +0000
+@@ -35,6 +35,7 @@
+ #include <signal.h>
+ #include <sys/stat.h>
+ #include <sys/file.h>   /* May get R_OK, etc. on some systems.  */
++#include <errno.h>
+ 
+ #include "config.h"
+ #include "obstack.h"
+@@ -131,12 +132,24 @@
+ extern void free ();
+ extern char *getenv ();
+ 
+-extern int errno, sys_nerr;
++#ifndef errno
++extern int errno;
++#endif
++
++#ifndef VMS
++#ifndef HAVE_STRERROR
++extern int sys_nerr;
+ #if defined(bsd4_4) || defined(__NetBSD__)
+ extern const char *const sys_errlist[];
+ #else
+ extern char *sys_errlist[];
+ #endif
++#else	/* HAVE_STERRROR */
++char *strerror ();
++#endif
++#else	/* VMS */
++char *strerror (int,...);
++#endif
+ 
+ extern int execv (), execvp ();
+ 
+@@ -4455,10 +4468,14 @@
+ {
+   char *s;
+ 
++#ifndef HAVE_STRERROR  
+   if (errno < sys_nerr)
+     s = concat ("%s: ", sys_errlist[errno], "");
+   else
+     s = "cannot open %s";
++#else
++  s = strerror (errno);
++#endif  
+   fatal (s, name);
+ }
+ 
+@@ -4468,10 +4485,14 @@
+ {
+   char *s;
+ 
++#ifndef HAVE_STRERROR  
+   if (errno < sys_nerr)
+     s = concat ("%s: ", sys_errlist[errno], "");
+   else
+     s = "cannot open %s";
++#else
++  s = strerror (errno);
++#endif
+   error (s, name);
+ }
+ 
+@@ -4481,11 +4502,14 @@
+ {
+   char *s;
+ 
++#ifndef HAVE_STRERROR
+   if (errno < sys_nerr)
+-    s = concat ("installation problem, cannot exec %s: ",
+-		sys_errlist[errno], "");
++    s = concat ("installation problem, cannot exec %s: ", sys_errlist[errno], "");
+   else
+     s = "installation problem, cannot exec %s";
++#else
++  s = strerror (errno);
++#endif    
+   error (s, name);
+ }
+ 
