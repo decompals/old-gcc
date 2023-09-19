@@ -1,0 +1,25 @@
+--- gcc-2.6.0/collect2.c	1994-07-11 19:08:16.000000000 +0000
++++ gcc-2.6.0/collect2_patched.c	2023-09-19 17:04:06.184446915 +0000
+@@ -292,6 +292,11 @@
+ my_strerror (e)
+      int e;
+ {
++  
++#ifdef HAVE_STRERROR
++  return strerror (e);
++
++#else
+   static char buffer[30];
+ 
+   if (!e)
+@@ -302,8 +307,9 @@
+ 
+   sprintf (buffer, "Unknown error %d", e);
+   return buffer;
++#endif
+ }
+-
++
+ /* Delete tempfiles and exit function.  */
+ 
+ static void
