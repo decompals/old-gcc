@@ -1,0 +1,73 @@
+diff --git "a/g++.c" "b/g++.c"
+index 1ae3157..d4b94ee 100644
+--- "a/g++.c"
++++ "b/g++.c"
+@@ -36,6 +36,7 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
+ #include <stdio.h>
+ #include <sys/types.h>
+ #include <sys/file.h>   /* May get R_OK, etc. on some systems.  */
++#include <errno.h>
+ 
+ /* Defined to the name of the compiler; if using a cross compiler, the
+    Makefile should compile this file with the proper name
+@@ -62,12 +63,24 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
+ #endif
+ #endif
+ 
+-extern int errno, sys_nerr;
+-#if defined(bsd4_4)
++#ifndef errno
++extern int errno;
++#endif
++
++#ifndef VMS
++#ifndef HAVE_STRERROR
++extern int sys_nerr;
++#if defined(bsd4_4) || defined(__NetBSD__)
+ extern const char *const sys_errlist[];
+ #else
+ extern char *sys_errlist[];
+ #endif
++#else	/* HAVE_STERRROR */
++char *strerror ();
++#endif
++#else	/* VMS */
++char *strerror (int,...);
++#endif
+ 
+ /* Name with which this program was invoked.  */
+ static char *programname;
+@@ -178,10 +191,14 @@ pfatal_with_name (name)
+ {
+   char *s;
+ 
++#ifndef HAVE_STRERROR  
+   if (errno < sys_nerr)
+     s = concat ("%s: ", sys_errlist[errno], "");
+   else
+     s = "cannot open %s";
++#else
++  s = strerror (errno);
++#endif
+   fatal (s, name);
+ }
+ 
+@@ -249,12 +266,15 @@ perror_exec (name)
+      char *name;
+ {
+   char *s;
+-
++ 
++#ifndef HAVE_STRERROR
+   if (errno < sys_nerr)
+-    s = concat ("installation problem, cannot exec %s: ",
+-		sys_errlist[errno], "");
++    s = concat ("installation problem, cannot exec %s: ", sys_errlist[errno], "");
+   else
+     s = "installation problem, cannot exec %s";
++#else
++  s = strerror (errno);
++#endif    
+   error (s, name);
+ }
+ 
