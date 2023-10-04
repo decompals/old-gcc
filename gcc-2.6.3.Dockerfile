@@ -10,8 +10,12 @@ RUN tar xzf gcc-2.6.3.tar.gz
 WORKDIR /work/gcc-2.6.3
 COPY patches /work/patches
 RUN sed -i -- 's/include <varargs.h>/include <stdarg.h>/g' *.c
+
 RUN patch -u -p1 obstack.h -i ../patches/obstack-2.7.2.h.patch
 RUN patch -u -p1 sdbout.c -i ../patches/sdbout-2.6.3.c.patch
+
+RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel.patch
+
 RUN ./configure \
     --target=mips-linux-gnu \
     --prefix=/opt/cross \

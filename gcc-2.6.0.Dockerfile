@@ -18,6 +18,8 @@ RUN patch -u -p1 cccp.c -i ../patches/cccp-2.6.0.c.patch
 RUN patch -u -p1 gcc.c -i ../patches/gcc-2.6.0.c.patch
 RUN patch -u -p1 cp/g++.c -i ../patches/g++-2.6.0.c.patch
 
+RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel.patch
+
 RUN ./configure \
     --target=mips-linux-gnu \
     --prefix=/opt/cross \
@@ -26,7 +28,7 @@ RUN ./configure \
     --host=i386-pc-linux \
     --build=i386-pc-linux
 
-RUN make cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -DHAVE_STRERROR" || true
+RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -DHAVE_STRERROR"
 
 COPY entrypoint.sh /work/
 RUN chmod +x /work/entrypoint.sh

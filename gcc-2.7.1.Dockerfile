@@ -24,7 +24,7 @@ RUN ./configure \
     --host=i386-pc-linux \
     --build=i386-pc-linux
 
-RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static" || true
+RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
 RUN test -f cc1
 
 COPY entrypoint.sh /work/
