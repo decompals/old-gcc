@@ -1,0 +1,12 @@
+--- mips.h	1995-06-15 19:32:41.000000000 +0000
++++ mips-patched.h	2023-10-04 09:29:22.998515730 +0000
+@@ -406,6 +406,9 @@
+ 			   | TARGET_ENDIAN_DEFAULT)}			\
+ }
+
++/* Default little-endian */
++#define TARGET_ENDIAN_DEFAULT -MASK_BIG_ENDIAN
++
+ /* Default target_flags if no switches are specified  */
+
+ #ifndef TARGET_DEFAULT

@@ -17,8 +17,7 @@ RUN patch -u -p1 collect2.c -i ../patches/collect2-2.6.0.c.patch
 RUN patch -u -p1 cccp.c -i ../patches/cccp-2.6.0.c.patch
 RUN patch -u -p1 gcc.c -i ../patches/gcc-2.6.0.c.patch
 RUN patch -u -p1 cp/g++.c -i ../patches/g++-2.6.0.c.patch
-
-RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel.patch
+RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.6.patch
 
 RUN ./configure \
     --target=mips-linux-gnu \
@@ -28,7 +27,10 @@ RUN ./configure \
     --host=i386-pc-linux \
     --build=i386-pc-linux
 
-RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -DHAVE_STRERROR"
+RUN make cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -DHAVE_STRERROR"
+
+COPY tests /work/tests
+RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
 
 COPY entrypoint.sh /work/
 RUN chmod +x /work/entrypoint.sh

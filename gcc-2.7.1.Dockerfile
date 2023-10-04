@@ -10,9 +10,12 @@ RUN tar xzf gcc-2.7.1.tar.gz
 WORKDIR /work/gcc-2.7.1
 COPY patches /work/patches
 RUN sed -i -- 's/include <varargs.h>/include <stdarg.h>/g' *.c
+
 RUN patch -u -p1 obstack.h -i ../patches/obstack-2.7.2.h.patch
 RUN patch -u -p1 configure -i ../patches/configure.patch
 RUN patch -u -p1 config.sub -i ../patches/config.sub.patch
+RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.7.patch
+
 RUN ./configure \
     --target=mips-linux-gnu \
     --prefix=/opt/cross \
@@ -25,7 +28,9 @@ RUN ./configure \
     --build=i386-pc-linux
 
 RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
-RUN test -f cc1
+
+COPY tests /work/tests
+RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
 
 COPY entrypoint.sh /work/
 RUN chmod +x /work/entrypoint.sh
