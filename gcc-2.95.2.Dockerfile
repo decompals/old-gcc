@@ -1,6 +1,6 @@
 FROM ubuntu:focal as build
 RUN apt-get update
-RUN apt-get install -y build-essential bison file gperf gcc gcc-multilib git wget
+RUN apt-get install -y build-essential bison gperf gcc gcc-multilib git wget
 
 ARG VERSION=2.95.2
 ENV VERSION=${VERSION}
@@ -29,12 +29,13 @@ COPY patches /work/patches
 
 RUN sed -i -- 's/include <varargs.h>/include <stdarg.h>/g' **/*.c
 RUN patch -u -p1 include/obstack.h -i ../patches/obstack-${VERSION}.h.patch
+RUN patch -u -p1 gcc/config/mips/mips.h -i ../patches/mipsel-2.7.patch
 
 RUN make -C libiberty/ CFLAGS="-std=gnu89 -m32 -static"
 RUN make -C gcc/ -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
 
-RUN test -f gcc/cc1
-RUN file gcc/cc1
+COPY tests /work/tests
+RUN ./gcc/cc1 -mel -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
 
 ### STAGE 2
 

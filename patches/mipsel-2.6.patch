@@ -1,0 +1,25 @@
+--- mips.h      1994-07-11 19:22:16.000000000 +0100
++++ mips-patched.h      2023-10-04 08:36:53.516458765 +0100
+@@ -544,8 +544,8 @@
+ /* Names to predefine in the preprocessor for this target machine.  */
+
+ #ifndef CPP_PREDEFINES
+-#define CPP_PREDEFINES "-Dmips -Dunix -Dhost_mips -DMIPSEB -DR3000 -DSYSTYPE_BSD43 \
+--D_mips -D_unix -D_host_mips -D_MIPSEB -D_R3000 -D_SYSTYPE_BSD43 \
++#define CPP_PREDEFINES "-Dmips -Dunix -Dhost_mips -DMIPSEL -DR3000 -DSYSTYPE_BSD43 \
++-D_mips -D_unix -D_host_mips -D_MIPSEL -D_R3000 -D_SYSTYPE_BSD43 \
+ -Asystem(unix) -Asystem(bsd) -Acpu(mips) -Amachine(mips)"
+ #endif
+
+@@ -901,6 +901,11 @@
+ */
+ #define BITS_BIG_ENDIAN 0
+
++/* Force little-endian */
++#define MIPSEL
++#define BYTES_BIG_ENDIAN 0
++#define WORDS_BIG_ENDIAN 0
++
+ /* Define this if most significant byte of a word is the lowest numbered. */
+ #ifndef BYTES_BIG_ENDIAN
+ #ifndef DECSTATION
