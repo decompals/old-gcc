@@ -19,7 +19,7 @@ RUN patch -u -p1 cccp.c -i ../patches/cccp-2.5.7.c.patch
 RUN patch -u -p1 gcc.c -i ../patches/gcc-2.5.7.c.patch
 RUN patch -u -p1 g++.c -i ../patches/g++-2.5.7.c.patch
 RUN patch -u -p1 config/mips/mips.h -i ../patches/mips-2.5.7.h.patch
-RUN patch -su -p1 < ../patches/psx.patch
+RUN patch -su -p1 < ../patches/psx-2.5.7.patch
 
 RUN ./configure \
     --target=mips-sony-psx \
