@@ -1,6 +1,7 @@
 FROM ubuntu:focal
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
-RUN apt-get install -y build-essential bison file gperf gcc gcc-multilib git wget
+RUN apt-get install -y build-essential gcc gcc-multilib wget
 
 ENV VERSION=2.7.2
 ENV GNUPATH=old-gnu
@@ -23,13 +24,16 @@ RUN ./configure \
 
 COPY patches /work/patches
 RUN sed -i -- 's/include <varargs.h>/include <stdarg.h>/g' *.c
+
 RUN patch -u -p1 obstack.h -i ../patches/obstack-2.7.2.h.patch
 RUN patch -u -p1 configure -i ../patches/configure.patch
 RUN patch -u -p1 config.sub -i ../patches/config.sub.patch
+RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.7.patch
 
 RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
-RUN test -f cc1
-RUN file cc1
+
+COPY tests /work/tests
+RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
 
 COPY entrypoint.sh /work/
 RUN chmod +x /work/entrypoint.sh
