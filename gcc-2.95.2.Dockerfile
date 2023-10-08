@@ -1,6 +1,7 @@
 FROM ubuntu:focal as build
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
-RUN apt-get install -y build-essential bison gperf gcc gcc-multilib git wget
+RUN apt-get install -y build-essential gcc gcc-multilib wget
 
 ARG VERSION=2.95.2
 ENV VERSION=${VERSION}
@@ -37,21 +38,8 @@ RUN make -C gcc/ -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
 COPY tests /work/tests
 RUN ./gcc/cc1 -mel -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
 
-### STAGE 2
+RUN mv ./gcc/xgcc ./gcc/gcc
+RUN mkdir /build && cp ./gcc/cpp ./gcc/cc1 ./gcc/gcc ./gcc/cc1plus ./gcc/g++ /build/
 
-FROM ubuntu:focal as base
-
-ARG VERSION=2.95.2
-ENV VERSION=${VERSION}
-
-RUN mkdir -p /work/gcc-${VERSION}/
-
-COPY --from=build /work/gcc-${VERSION}/gcc/cpp /work/gcc-${VERSION}/
-COPY --from=build /work/gcc-${VERSION}/gcc/cc1 /work/gcc-${VERSION}/
-COPY --from=build /work/gcc-${VERSION}/gcc/xgcc /work/gcc-${VERSION}/
-COPY --from=build /work/gcc-${VERSION}/gcc/cc1plus /work/gcc-${VERSION}/
-COPY --from=build /work/gcc-${VERSION}/gcc/g++ /work/gcc-${VERSION}/
-
-COPY entrypoint.sh /work/
-RUN chmod +x /work/entrypoint.sh
-CMD [ "/work/entrypoint.sh" ]
+FROM scratch AS export
+COPY --from=build /build/* .

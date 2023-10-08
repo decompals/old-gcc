@@ -1,9 +1,0 @@
-version: '3'
-services:
-  gcc:
-    build:
-      context: .
-      dockerfile: gcc-${VERSION}.Dockerfile
-    container_name: gcc
-    volumes:
-      - ./build-gcc-${VERSION}:/build
