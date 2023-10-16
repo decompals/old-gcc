@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:focal as build
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y build-essential gcc gcc-multilib wget
@@ -29,8 +29,13 @@ RUN ./configure \
     --host=i386-pc-linux \
     --build=i386-pc-linux
 
-RUN make cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -DHAVE_STRERROR -march=i686" || true
+RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -march=i686 -DHAVE_STRERROR"
 
-COPY entrypoint.sh /work/
-RUN chmod +x /work/entrypoint.sh
-CMD [ "/work/entrypoint.sh" ]
+COPY tests /work/tests
+RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
+
+RUN mv xgcc gcc
+RUN mkdir /build && cp cpp cc1 gcc cc1plus g++ /build/ || true
+
+FROM scratch AS export
+COPY --from=build /build/* .
