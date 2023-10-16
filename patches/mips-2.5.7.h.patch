@@ -1,0 +1,15 @@
+diff --git "a/config/mips/mips.h" "b/config/mips/mips.h"
+index 35a56b8..966f694 100644
+--- "a/config/mips/mips.h"
++++ "b/config/mips/mips.h"
+@@ -519,10 +519,6 @@ while (0)
+ 	#error "Define CPP_SPEC in the appropriate tm.h file"
+ #endif
+ 
+-#ifndef LINK_SPEC
+-	#error "Define LINK_SPEC in the appropriate tm.h file"
+-#endif
+-
+ #ifndef LIB_SPEC
+ 	#error "Define LIB_SPEC in the appropriate tm.h file"
+ #endif
