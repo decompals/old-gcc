@@ -1,6 +1,6 @@
---- config/mips/mips.h	1995-06-15 19:32:41.000000000 +0000
-+++ config/mips/mips-patched.h	2023-11-14 22:31:00.506591160 +0000
-@@ -406,6 +406,9 @@
+--- config/mips/mips.h	1997-12-29 00:34:57.000000000 +0000
++++ config/mips/mips-patched.h	2023-11-14 22:29:18.785172634 +0000
+@@ -441,6 +441,9 @@
  			   | TARGET_ENDIAN_DEFAULT)}			\
  }
  
@@ -10,7 +10,7 @@
  /* Default target_flags if no switches are specified  */
  
  #ifndef TARGET_DEFAULT
-@@ -954,6 +957,22 @@
+@@ -1153,6 +1156,22 @@
  #define ASM_OUTPUT_DESTRUCTOR(file, name)
  
  #endif /* 0 */
@@ -20,12 +20,12 @@
 +   NULL_TREE.  Some target formats do not support arbitrary sections.  Do not
 +   define this macro in such cases.  */
 +
-+#define ASM_OUTPUT_SECTION_NAME(F, DECL, NAME) \
++#define ASM_OUTPUT_SECTION_NAME(F, DECL, NAME, RELOC) \
 +do {								\
 +  extern FILE *asm_out_text_file;				\
 +  if ((DECL) && TREE_CODE (DECL) == FUNCTION_DECL)		\
 +    fprintf (asm_out_text_file, "\t.section %s,\"ax\",@progbits\n", (NAME)); \
-+  else if ((DECL) && TREE_READONLY (DECL))			\
++  else if ((DECL) && DECL_READONLY_SECTION (DECL, RELOC))	\
 +    fprintf (F, "\t.section %s,\"a\",@progbits\n", (NAME));	\
 +  else								\
 +    fprintf (F, "\t.section %s,\"aw\",@progbits\n", (NAME));	\

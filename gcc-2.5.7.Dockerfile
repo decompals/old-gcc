@@ -18,7 +18,7 @@ RUN patch -u -p1 collect2.c -i ../patches/collect2-2.6.0.c.patch
 RUN patch -u -p1 cccp.c -i ../patches/cccp-2.5.7.c.patch
 RUN patch -u -p1 gcc.c -i ../patches/gcc-2.5.7.c.patch
 RUN patch -u -p1 g++.c -i ../patches/g++-2.5.7.c.patch
-RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.6.patch
+RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.5.patch
 
 RUN ./configure \
     --target=mips-linux-gnu \

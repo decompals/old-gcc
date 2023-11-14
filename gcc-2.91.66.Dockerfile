@@ -30,13 +30,14 @@ COPY patches /work/patches
 
 RUN sed -i -- 's/include <varargs.h>/include <stdarg.h>/g' **/*.c
 RUN patch -u -p1 gcc/obstack.h -i ../patches/obstack-${VERSION}.h.patch
-RUN patch -u -p1 gcc/config/mips/mips.h -i ../patches/mipsel-2.7.patch
+RUN patch -u -p1 gcc/config/mips/mips.h -i ../patches/mipsel-2.8.patch
 
 RUN make -C libiberty/ CFLAGS="-std=gnu89 -m32 -static"
 RUN make -C gcc/ -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
 
 COPY tests /work/tests
 RUN ./gcc/cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
+RUN ./gcc/cc1 -quiet -O2 /work/tests/section_attribute.c
 
 RUN mv ./gcc/xgcc ./gcc/gcc
 RUN mkdir /build && cp ./gcc/cpp ./gcc/cc1 ./gcc/gcc ./gcc/cc1plus ./gcc/g++ /build/
