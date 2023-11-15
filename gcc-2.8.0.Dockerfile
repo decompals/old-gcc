@@ -26,12 +26,13 @@ COPY patches /work/patches
 RUN sed -i -- 's/include <varargs.h>/include <stdarg.h>/g' *.c
 RUN patch -u -p1 obstack.h -i ../patches/obstack-2.8.0.h.patch
 
-RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.7.patch
+RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.8.patch
 
 RUN make cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
 
 COPY tests /work/tests
 RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
+RUN ./cc1 -quiet -O2 /work/tests/section_attribute.c
 
 RUN mv xgcc gcc
 RUN mkdir /build && cp cpp cc1 gcc cc1plus g++ /build/

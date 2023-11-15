@@ -5,6 +5,7 @@ Run `VERSION=2.7.2.2 make` to build an old version of GCC.
 Alternatively use one of the prebuild binaries available from the [Releases](https://github.com/decompals/old-gcc/releases) page.
 
 **Currently supported versions:**
+- GCC 2.5.7
 - GCC 2.6.0
 - GCC 2.6.3
 - GCC 2.7.0
