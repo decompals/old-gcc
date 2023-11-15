@@ -17,6 +17,7 @@ RUN patch -u -p1 cp/g++.c -i ../patches/g++-2.6.3.c.patch
 RUN patch -su -p1 < ../patches/psx.patch
 
 RUN touch -c cp/parse.y cp/parse.h cp/parse.c
+RUN touch insn-config.h
 
 RUN ./configure \
     --target=mips-sony-psx \
@@ -26,7 +27,7 @@ RUN ./configure \
     --host=i386-pc-linux \
     --build=i386-pc-linux
 
-RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -march=i686 -DHAVE_STRERROR"
+RUN make --jobs $(nproc) cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -march=i686 -DHAVE_STRERROR"
 
 COPY tests /work/tests
 RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s

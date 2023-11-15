@@ -20,6 +20,7 @@ RUN patch -u -p1 gcc.c -i ../patches/gcc-2.5.7.c.patch
 RUN patch -u -p1 g++.c -i ../patches/g++-2.5.7.c.patch
 RUN patch -u -p1 config/mips/mips.h -i ../patches/mips-2.5.7.h.patch
 RUN patch -su -p1 < ../patches/psx-2.5.7.patch
+RUN touch insn-config.h
 
 RUN ./configure \
     --target=mips-sony-psx \
@@ -29,7 +30,7 @@ RUN ./configure \
     --host=i386-pc-linux \
     --build=i386-pc-linux
 
-RUN make -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -march=i686 -DHAVE_STRERROR"
+RUN make --jobs $(nproc) cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static -Dbsd4_4 -Dmips -march=i686 -DHAVE_STRERROR"
 
 COPY tests /work/tests
 RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
