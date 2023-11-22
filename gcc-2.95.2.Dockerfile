@@ -33,7 +33,7 @@ RUN patch -u -p1 include/obstack.h -i ../patches/obstack-${VERSION}.h.patch
 RUN patch -u -p1 gcc/config/mips/mips.h -i ../patches/mipsel-2.8.patch
 
 RUN make -C libiberty/ CFLAGS="-std=gnu89 -m32 -static"
-RUN make -C gcc/ -j cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
+RUN make -C gcc/ --jobs $(nproc) cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -static"
 
 COPY tests /work/tests
 RUN ./gcc/cc1 -mel -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
