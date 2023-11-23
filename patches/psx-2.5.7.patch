@@ -25,7 +25,7 @@ diff --color -ruN -p1 gcc-2.6.3/config/mips/psx.h gcc-2.6.3-psx/config/mips/psx.
 +
 +/* Definitions by GIL for PSX */
 +
-+/*#define TARGET_DEFAULT (MASK_GAS+MASK_SOFT_FLOAT+MASK_GPOPT)*/
++#define TARGET_DEFAULT (MASK_GAS+MASK_SOFT_FLOAT)
 +
 +#define CPP_PREDEFINES	"-Dmips -DMIPSEL"
 +
