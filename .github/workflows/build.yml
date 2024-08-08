@@ -27,6 +27,7 @@ jobs:
           - 2.7.2.3
           - 2.8.0
           - 2.8.1
+          - 2.8.1-psx
           - 2.91.66
           - 2.95.2
     name: Build GCC ${{ matrix.version }}
