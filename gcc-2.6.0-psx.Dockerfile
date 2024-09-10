@@ -21,7 +21,7 @@ RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.6.patch
 RUN patch -su -p1 < ../patches/psx.patch
 
 RUN ./configure \
-    --target=mips-linux-gnu \
+    --target=mips-sony-psx \
     --prefix=/opt/cross \
     --with-endian-little \
     --with-gnu-as \

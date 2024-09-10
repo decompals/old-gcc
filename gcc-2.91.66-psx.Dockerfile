@@ -22,7 +22,7 @@ RUN patch -su -p1 < ../patches/psx.patch
 RUN for dir in libiberty gcc; do \
     cd /work/gcc-${VERSION}/${dir}; \
     ./configure \
-        --target=mips-linux-gnu \
+        --target=mips-sony-psx \
         --prefix=/opt/cross \
         --with-endian-little \
         --with-gnu-as \
