@@ -17,19 +17,24 @@ jobs:
           - 2.5.7
           - 2.5.7-psx
           - 2.6.0
+          - 2.6.0-psx
           - 2.6.3
           - 2.6.3-psx
           - 2.7.0
           - 2.7.1
           - 2.7.2
+          - 2.7.2-psx
           - 2.7.2.1
           - 2.7.2.2
           - 2.7.2.3
           - 2.8.0
+          - 2.8.0-psx
           - 2.8.1
           - 2.8.1-psx
           - 2.91.66
+          - 2.91.66-psx
           - 2.95.2
+          - 2.95.2-psx
     name: Build GCC ${{ matrix.version }}
     steps:
       - name: Clone repository
@@ -42,12 +47,12 @@ jobs:
           cd build-gcc-${{ matrix.version }}
           tar -czvf ../gcc-${{ matrix.version }}.tar.gz *
       - name: Create artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: gcc-${{ matrix.version }}
           path: gcc-${{ matrix.version }}.tar.gz
       - name: Publish release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
