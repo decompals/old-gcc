@@ -34,6 +34,7 @@ RUN make --jobs $(nproc) cpp cc1 xgcc cc1plus g++ CFLAGS="-std=gnu89 -m32 -stati
 
 COPY tests /work/tests
 RUN ./cc1 -quiet -O2 /work/tests/little_endian.c && grep -E 'lbu\s\$2,0\(\$4\)' /work/tests/little_endian.s
+RUN ./cc1 -quiet -help </dev/null 2>&1 | grep -- -msoft-float
 
 RUN mv xgcc gcc
 RUN mkdir /build && cp cpp cc1 gcc cc1plus g++ /build/ || true
