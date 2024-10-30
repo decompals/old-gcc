@@ -5,7 +5,7 @@
  }
 
 +/* Default little-endian */
-+#define TARGET_ENDIAN_DEFAULT -MASK_BIG_ENDIAN
++#define TARGET_ENDIAN_DEFAULT 0
 +
  /* Default target_flags if no switches are specified  */
 

@@ -3,16 +3,16 @@
 @@ -406,6 +406,9 @@
  			   | TARGET_ENDIAN_DEFAULT)}			\
  }
- 
+
 +/* Default little-endian */
-+#define TARGET_ENDIAN_DEFAULT -MASK_BIG_ENDIAN
++#define TARGET_ENDIAN_DEFAULT 0
 +
  /* Default target_flags if no switches are specified  */
- 
+
  #ifndef TARGET_DEFAULT
 @@ -954,6 +957,22 @@
  #define ASM_OUTPUT_DESTRUCTOR(file, name)
- 
+
  #endif /* 0 */
 +
 +/* A C statement to output something to the assembler file to switch to section
@@ -32,4 +32,4 @@
 +} while (0)
  
  /* Target machine storage layout */
- 
+
