@@ -1,0 +1,32 @@
+diff --git a/config/mips/mips.h b/config/mips/mips.h
+index 1c83ef8..be3f59a 100644
+--- a/config/mips/mips.h
++++ b/config/mips/mips.h
+@@ -426,6 +426,9 @@ extern void		text_section ();
+ 			   | TARGET_ENDIAN_DEFAULT)}			\
+ }
+ 
++/* Default little-endian */
++#define TARGET_ENDIAN_DEFAULT 0
++
+ /* Default target_flags if no switches are specified  */
+ 
+ #ifndef TARGET_DEFAULT
+@@ -1120,6 +1123,17 @@ do {							\
+ #define ASM_OUTPUT_DESTRUCTOR(file, name)
+ 
+ #endif /* 0 */
++
++#define ASM_OUTPUT_SECTION_NAME(F, DECL, NAME) \
++do {								\
++  extern FILE *asm_out_text_file;				\
++  if ((DECL) && TREE_CODE (DECL) == FUNCTION_DECL)		\
++    fprintf (asm_out_text_file, "\t.section %s,\"ax\",@progbits\n", (NAME)); \
++  else if ((DECL) && TREE_READONLY (DECL))			\
++    fprintf (F, "\t.section %s,\"a\",@progbits\n", (NAME));	\
++  else								\
++    fprintf (F, "\t.section %s,\"aw\",@progbits\n", (NAME));	\
++} while (0)
+ 
+ /* Target machine storage layout */
+ 
