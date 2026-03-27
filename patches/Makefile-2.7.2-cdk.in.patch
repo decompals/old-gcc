@@ -1,5 +1,5 @@
 diff --git a/Makefile.in b/Makefile.in
-index 15739a5..27045d2 100644
+index 15739a5..24ff26a 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -1339,7 +1339,7 @@ convert.o: convert.c $(CONFIG_H) $(TREE_H) flags.h convert.h
@@ -11,6 +11,15 @@ index 15739a5..27045d2 100644
  # END CYGNUS LOCAL
  print-tree.o : print-tree.c $(CONFIG_H) $(TREE_H)
  stor-layout.o : stor-layout.c $(CONFIG_H) $(TREE_H) flags.h function.h
+@@ -1348,7 +1348,7 @@ toplev.o : toplev.c $(CONFIG_H) $(TREE_H) $(RTL_H) bytecode.h bc-emit.h \
+    flags.h input.h insn-attr.h xcoffout.h defaults.h output.h \
+    $(lang_options_files)
+ 	$(CC) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) $(MAYBE_USE_COLLECT2) \
+-	  -DTARGET_NAME=\"$(target_alias)\" \
++	  -DTARGET_NAME=\"SonyPSX\" \
+ 	  -c `echo $(srcdir)/toplev.c | sed 's,^\./,,'`
+ 
+ rtl.o : rtl.c $(CONFIG_H) $(RTL_H)
 @@ -1385,7 +1385,7 @@ dbxout.o : dbxout.c $(CONFIG_H) $(TREE_H) $(RTL_H) flags.h regs.h \
     insn-config.h reload.h gstab.h xcoffout.h defaults.h output.h
  sdbout.o : sdbout.c $(CONFIG_H) $(TREE_H) $(RTL_H) flags.h except.h \
