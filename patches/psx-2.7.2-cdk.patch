@@ -173,3 +173,22 @@ diff --color -ruN -p1 gcc-2.7.2/version.c gcc-2.7.2-psx/version.c
 @@ -1,1 +1,1 @@
 -char *version_string = "cygnus-2.7.2-970404";
 +char *version_string = "cygnus-2.7.2-970404 SN32.3.7.0004";
+diff --git a/toplev.c b/toplev.c
+index 48722cb..c579f66 100644
+--- a/toplev.c
++++ b/toplev.c
+@@ -4675,14 +4675,7 @@ print_version (file, indent)
+ #endif
+   /* END CYGNUS LOCAL -- Haifa scheduler */
+   fprintf (file, " (%s)", TARGET_NAME);
+-#ifdef __GNUC__
+-#ifndef __VERSION__
+-#define __VERSION__ "[unknown]"
+-#endif
+-  fprintf (file, " compiled by GNU C version %s.\n", __VERSION__);
+-#else
+   fprintf (file, " compiled by CC.\n");
+-#endif
+ }
+ 
+ /* Print an option value and return the adjusted position in the line.
