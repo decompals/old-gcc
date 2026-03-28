@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates build-essential gcc gcc-multilib wget byacc
 
 WORKDIR /work
-RUN wget https://github.com/ser-pounce/cdk-gcc/archive/refs/tags/b18.tar.gz
+RUN wget https://github.com/decompals/old-gcc/releases/download/0.14/b18.tar.gz
 RUN tar xzf b18.tar.gz
 
 WORKDIR /work/cdk-gcc-b18
