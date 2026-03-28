@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates build-essential gcc gcc-multilib wget byacc
 
 WORKDIR /work
-RUN wget https://github.com/ser-pounce/cdk-gcc/archive/refs/tags/b18.tar.gz
+RUN wget https://github.com/decompals/old-gcc/releases/download/0.14/b18.tar.gz
 RUN tar xzf b18.tar.gz
 
 WORKDIR /work/cdk-gcc-b18
@@ -13,9 +13,10 @@ COPY patches /work/patches
 RUN patch -u -p1 Makefile.in -i ../patches/Makefile-2.7.2-cdk.in.patch
 RUN patch -u -p1 obstack.h -i ../patches/obstack-2.7.2-cdk.h.patch
 RUN patch -u -p1 config/mips/mips.h -i ../patches/mipsel-2.7-cdk.patch
+RUN patch -su -p1 < ../patches/psx-2.7.2-cdk.patch
 
 RUN ./configure \
-    --target=mips-linux-gnu \
+    --target=mips-sony-psx \
     --prefix=/opt/cross \
     --with-endian-little \
     --with-gnu-as \
