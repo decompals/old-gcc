@@ -1,0 +1,45 @@
+name: Compile GCC (macOS)
+on:
+  push:
+    tags: '*'
+    branches: [master]
+    paths-ignore:
+      - README.md
+  pull_request:
+    branches: [master]
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - 2.7.2-psx
+          - 2.7.2-cdk
+          - 2.8.1-psx
+    name: Build GCC ${{ matrix.version }} (macOS)
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          # byacc is required for gcc-2.7.2-cdk
+          brew install byacc
+      - name: Build GCC
+        run: VERSION=${{ matrix.version }} PLATFORM=macos make
+      - name: Create release archive
+        shell: bash
+        run: |
+          cd build-gcc-${{ matrix.version }}
+          tar -czvf ../gcc-${{ matrix.version }}-macos.tar.gz *
+      - name: Create artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gcc-${{ matrix.version }}-macos
+          path: gcc-${{ matrix.version }}-macos.tar.gz
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            gcc-${{ matrix.version }}-macos.tar.gz
