@@ -22,4 +22,7 @@
 /* macOS provides bcopy/bcmp/bzero via <string.h>.  */
 #define BSTRING
 
+#define HOST_BITS_PER_WIDE_INT 32
+#define HOST_WIDE_INT int
+
 #include "tm.h"

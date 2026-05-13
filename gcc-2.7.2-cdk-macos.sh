@@ -82,6 +82,8 @@ make cpp cc1 xgcc cc1plus g++ \
 ./cc1 -quiet -O2 "$SCRIPT_DIR/tests/little_endian.c" -o little_endian.s
 grep -E 'lbu\s\$2,0\(\$4\)' little_endian.s
 ./cc1 -quiet -O2 "$SCRIPT_DIR/tests/section_attribute.c" -o /dev/null
+./cc1 -quiet -O2 "$SCRIPT_DIR/tests/host_wide_int.c" -o host_wide_int.s
+grep -E '# 0x80000000$' host_wide_int.s
 
 mkdir -p "$OUTDIR"
 cp cpp cc1 xgcc cc1plus g++ "$OUTDIR/"
