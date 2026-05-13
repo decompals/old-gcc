@@ -71,7 +71,6 @@ make --jobs "$(sysctl -n hw.ncpu)" cpp cc1 xgcc cc1plus g++ \
 ./cc1 -quiet -O2 "$SCRIPT_DIR/tests/little_endian.c" -o little_endian.s
 grep -E 'lbu\s\$2,0\(\$4\)' little_endian.s
 ./cc1 -quiet -O2 "$SCRIPT_DIR/tests/section_attribute.c" -o /dev/null
-# Regression test for HOST_WIDE_INT width — see tests/host_wide_int.c.
 ./cc1 -quiet -O2 "$SCRIPT_DIR/tests/host_wide_int.c" -o host_wide_int.s
 grep -E '# 0x80000000$' host_wide_int.s
 ./cc1 -quiet -help</dev/null 2>&1 | grep -- -msoft-float
