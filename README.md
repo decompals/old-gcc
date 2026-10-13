@@ -16,6 +16,7 @@ Alternatively use one of the prebuild binaries available from the [Releases](htt
 - GCC 2.7.2.3
 - GCC 2.8.0
 - GCC 2.8.1
+- GCC 2.91.60
 - GCC 2.91.66
 - GCC 2.95.22
 
