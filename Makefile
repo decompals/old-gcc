@@ -3,6 +3,8 @@ PLATFORM ?= linux
 all: check-version
 ifeq ($(PLATFORM),macos)
 	bash gcc-$(VERSION)-macos.sh
+else ifeq ($(PLATFORM),windows)
+	docker build -f gcc-$(VERSION)-windows.Dockerfile --target export --output build-gcc-$(VERSION)-windows .
 else
 	docker build -f gcc-$(VERSION).Dockerfile --target export --output build-gcc-$(VERSION) .
 endif
@@ -17,6 +19,10 @@ endif
 ifeq ($(PLATFORM),macos)
 ifeq ($(wildcard gcc-$(VERSION)-macos.sh),)
 	$(error Building GCC $(VERSION) for macOS is not currently supported)
+endif
+else ifeq ($(PLATFORM),windows)
+ifeq ($(wildcard gcc-$(VERSION)-windows.Dockerfile),)
+	$(error Building GCC $(VERSION) for Windows is not currently supported)
 endif
 else
 ifeq ($(wildcard gcc-$(VERSION).Dockerfile),)
