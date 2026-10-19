@@ -45,6 +45,9 @@ sed -i '' 's/| hiux\* | abug | nacl\*/| psx* \\\
 
 # Add xm-darwin.h and teach configure about *-apple-darwin* hosts.
 cp "$PATCHES/xm-darwin.h" config/
+# CONST_DOUBLE copies and the host-format float output assume a 32-bit long: a double or float constant came out as
+# zeros or garbage on a 64-bit host (see macos/const-double-fix.py)
+python3 "$SCRIPT_DIR/macos/const-double-fix.py" .
 chmod +w configure
 awk '/^\t\*\)$/ { buf=$0; next }
      buf != "" { if (!done && /echo.*Configuration.*not supported/) {

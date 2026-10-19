@@ -17,6 +17,11 @@ jobs:
           - 2.7.2-psx
           - 2.7.2-cdk
           - 2.8.1-psx
+          - 2.6.0-psx
+          - 2.6.3-psx
+          - 2.8.0-psx
+          - 2.91.66-psx
+          - 2.95.2-psx
     name: Build GCC ${{ matrix.version }} (macOS)
     steps:
       - name: Clone repository
